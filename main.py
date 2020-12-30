@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify
 import functools
-
+import json
+import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -26,6 +30,33 @@ def accept_only_tyk_requests(func):
 @accept_only_tyk_requests
 def hello_world():
     return jsonify('Hello world!'), 200
+
+
+@app.route('/login')
+def tyk_login_with_email():
+    """
+    Login method servers a firebase proxy so that users can access the tyk
+    dashboard using already existing console(firebase) credentials.
+    """
+    email = request.form.get('email')
+    password = request.form.get('password')
+    if not email or not password:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "error_code": "BAD_REQUEST_MISSING_FIELD",
+                    "error": "Missing Required Field",
+                }
+            ),
+            400,
+        )
+
+    firebase_api_key = os.getenv('FIREBASE_API_KEY')
+    response = requests.post(
+        f'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={firebase_api_key}',
+        json={'email': email, 'password': password})
+    return jsonify(json.loads(response.text))
 
 
 if __name__ == '__main__':
