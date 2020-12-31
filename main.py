@@ -32,14 +32,14 @@ def hello_world():
     return jsonify('Hello world!'), 200
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET'])
 def tyk_login_with_email():
     """
     Login method servers a firebase proxy so that users can access the tyk
     dashboard using already existing console(firebase) credentials.
     """
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = request.args.get('email')
+    password = request.args.get('password')
     if not email or not password:
         return (
             jsonify(
