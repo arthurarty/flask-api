@@ -32,7 +32,7 @@ def hello_world():
     return jsonify('Hello world!'), 200
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/login/', methods=['GET'])
 def tyk_login_with_email():
     """
     Login method servers a firebase proxy so that users can access the tyk
