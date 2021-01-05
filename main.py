@@ -56,7 +56,11 @@ def tyk_login_with_email():
     response = requests.post(
         f'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={firebase_api_key}',
         json={'email': email, 'password': password})
-    return jsonify(json.loads(response.text))
+    json_resp = json.loads(response.text)
+    if json_resp.get('error'):
+        error = json_resp.get('error')
+        return jsonify(json_resp), error.get('code')
+    return jsonify(json_resp)
 
 
 if __name__ == '__main__':
