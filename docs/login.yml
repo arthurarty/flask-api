@@ -1,0 +1,12 @@
+parameters:
+  - name: email
+    in: body
+    type: string
+    required: true
+  - name: password
+    in: body
+    type: string
+    required: true
+responses:
+  200:
+    description: Successfull Login

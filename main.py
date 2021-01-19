@@ -4,9 +4,11 @@ import json
 import requests
 import os
 from dotenv import load_dotenv
+from flasgger import Swagger, swag_from
 load_dotenv()
 
 app = Flask(__name__)
+swagger = Swagger(app)
 
 
 def accept_only_tyk_requests(func):
@@ -33,6 +35,7 @@ def hello_world():
 
 
 @app.route('/login/', methods=['POST'])
+@swag_from('docs/login.yml')
 def tyk_login_with_email():
     """
     Login method servers a firebase proxy so that users can access the tyk
