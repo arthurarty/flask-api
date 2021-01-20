@@ -5,6 +5,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from flasgger import Swagger, swag_from
+import random
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -32,6 +34,14 @@ def accept_only_tyk_requests(func):
 @accept_only_tyk_requests
 def hello_world():
     return jsonify('Hello world!'), 200
+
+
+@app.route('/tyk')
+@accept_only_tyk_requests
+def test_tyk_gateway():
+    sleep(15)
+    return jsonify(number=random.random())
+
 
 
 @app.route('/login/', methods=['POST', 'GET'])
