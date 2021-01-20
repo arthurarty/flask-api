@@ -40,7 +40,7 @@ def hello_world():
 @app.route('/tyk')
 @accept_only_tyk_requests
 def test_tyk_gateway():
-    sleep(15)
+    sleep(3)
     return jsonify(number=random.random())
 
 
